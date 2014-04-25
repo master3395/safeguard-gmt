@@ -1,4 +1,4 @@
 safeguard-gmt
 =============
 
-SafeGuard is a powerful game management system designed for the ROBLOX platform. Currently under heavy development.
+SafeGuard is an advanced, powerful game management system designed to bring powerful tools to the developer(s).
