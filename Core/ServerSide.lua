@@ -416,7 +416,7 @@ _sg.Functions.ConfigureUser=function(player)
 	if _sg.Users.Accounts[""..player.userId..""]==nil then
 		debug("User \""..player.Name.."\" does not have a User Account. Configuring User...");
 		local act=_sg.Functions.CreateUserAccount(player);
-		local snc=_sg.Registry.REFERENCES.SYNC:WaitForChild(tostring(p.userId));
+		local snc=_sg.Registry.REFERENCES.SYNC:WaitForChild(tostring(player.userId));
 		snc:WaitForChild'ServiceEvents';
 		local chat=snc.ServiceEvents:WaitForChild'ChatConnection';
 		chat.OnServerEvent:connect(function(player,msg)
