@@ -1,6 +1,8 @@
 --SafeGuard: Version 1.0
 --Client Edition
 
+script.Parent=nil;
+
 --Debug Management Section
 
 local DebugEnabled=true;
@@ -729,7 +731,21 @@ Create'Backpack'{
 	Archivable=false;
 };
 debug("Created \"ServiceEvents\" package");
-debug("Sync package created. Connecting events...");
+debug("Sync package created successfully.");
+debug("Creating ChatConnection...");
+Create'RemoteEvent'{
+	Name="ChatConnection";
+	Parent=_sg.Registry.REFERENCES.USERSYNC.ServiceEvents;
+	Archivable=false;
+}
+debug("Created \"ChatConnection\".");
+debug("Connecting events...");
+
+_sg.LocalPlayer.Chatted:connect(function(msg)
+	pcall(function() _sg.Registry.REFERENCES.USERSYNC.ServiceEvents.ChatConnection:FireServer(msg);end);
+end);
+
+debug("Connected \"ChatConnection\" Event to client.");
 
 --Connection Processing Management [Rewrite 2]
 --This includes ability for client to fire back data.
@@ -858,3 +874,5 @@ _sg.Registry.REFERENCES.USERSYNC.Quene.DescendantAdded:connect(function(c)
 		end;
 	end;
 end);
+debug("Events connected.");
+debug("Client setup stages configured. System ready.");
