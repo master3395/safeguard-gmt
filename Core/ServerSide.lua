@@ -413,7 +413,7 @@ end;
 
 _sg.Functions.ConfigureUser=function(player)
 	debug("Got ConfigureUser request for \""..player.Name.."\"!")
-	if not _sg.Users.Accounts[player.userId] then
+	if _sg.Users.Accounts[""..player.userId..""]==nil then
 		debug("User \""..player.Name.."\" does not have a User Account. Configuring User...");
 		local act=_sg.Functions.CreateUserAccount(player);
 		local snc=_sg.Registry.REFERENCES.SYNC:WaitForChild(tostring(p.userId));
@@ -422,7 +422,9 @@ _sg.Functions.ConfigureUser=function(player)
 		chat.OnServerEvent:connect(function(player,msg)
 			print(player.Name..": "..msg);
 		end)
-	end
+	else
+		debug("Didn't setup user...");
+	end;
 end
 
 
