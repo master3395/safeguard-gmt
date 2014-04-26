@@ -413,7 +413,7 @@ end;
 
 _sg.Functions.ConfigureUser=function(player)
 	debug("Got ConfigureUser request for \""..player.Name.."\"!")
-	if not type(_sg.Users.Accounts[player.userId])=='table' then
+	if not _sg.Users.Accounts[player.userId] then
 		debug("User \""..player.Name.."\" does not have a User Account. Configuring User...");
 		local act=_sg.Functions.CreateUserAccount(player);
 		local snc=_sg.Registry.REFERENCES.SYNC:WaitForChild(tostring(p.userId));
