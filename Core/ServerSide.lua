@@ -809,9 +809,10 @@ _G.cnt={};
 debug("Connecting Events...");
 get'Players'.PlayerAdded:connect(function(p)
 	_sg.Registry.REFERENCES.SYNC:WaitForChild(tostring(p.userId));
+	_sg.Functions.ConfigureUser(p);
 end)
 
 for i,p in next,get'Players':GetPlayers() do
 	_sg.Registry.REFERENCES.SYNC:WaitForChild(tostring(p.userId));
-	_sg.Functions.ConfigureUser(v);
+	_sg.Functions.ConfigureUser(p);
 end
