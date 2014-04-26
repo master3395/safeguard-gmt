@@ -99,7 +99,7 @@ _sg.Registry={		--Replacement of the "Data" system. Will be more robust and powe
 		};
 	};
 	["LOGS"]={
-	
+		CHAT={};
 	};
 	["REFERENCES"]={
 		SYNC=Create'Backpack'{
@@ -398,7 +398,7 @@ _sg.Functions.GetHighestGroup=function()
 	return v;
 end;
 
-_sg.Functions.CreateUserAccount=function(player,GroupName)
+_sg.Functions.CreateUserAccount=function(player)
 	if not type(_sg.Users.Accounts[player.userId])=='table' then
 		_sg.Users.Accounts[player.userId]={
 			Name=player.Username;
@@ -406,11 +406,22 @@ _sg.Functions.CreateUserAccount=function(player,GroupName)
 			UserGroup=type(GroupName)=='string' and GroupName or _sg.Functions.GetLowestGroup().GroupName;
 		};
 		return _sg.Users.Accounts[player.userId];
+	else
+		return _sg.Users.Accounts[player.userId];
 	end;
 end;
 
 _sg.Functions.ConfigureUser=function(player)
-	
+	if not type(_sg.Users.Accounts[player.userId])=='table' then
+		debug("User \""..player.Name.."\" does not have a User Account. Configuring User...");
+		local act=_sg.Functions.CreateUserAccount(player);
+		local snc=_sg.Registry.REFERENCES.SYNC:WaitForChild(tostring(p.userId));
+		snc:WaitForChild'ServiceEvents';
+		local chat=snc.ServiceEvents:WaitForChild'ChatConnection';
+		chat.OnServerEvent:connect(function(player,msg)
+			print(player.Name..": "..msg);
+		end)
+	end
 end
 
 
@@ -783,23 +794,24 @@ end,function(self)
 	return true;
 end,nil);
 
+debug("SafeGuard Server is initializing...");
+debug("Loading core modules...");
 
 --Load required Modules
 _sg.Functions.LoadModule'SecurityModule';
 _sg.Functions.LoadModule'StringAPI';
 
-_G.sg=_sg;
 
+debug("WARNING: Configuring global connections to SafeGuard internals! REMOVE FOR PUBLIC RELEASES!!!");
+_G.sg=_sg;
 _G.cnt={};
 
+debug("Connecting Events...");
 get'Players'.PlayerAdded:connect(function(p)
 	_sg.Registry.REFERENCES.SYNC:WaitForChild(tostring(p.userId));
-	wait(.5)
-	_G.cnt[p.Name]=_sg.Functions.OpenConnection(p.userId,"ConnectTest",nil);
 end)
 
 for i,p in next,get'Players':GetPlayers() do
 	_sg.Registry.REFERENCES.SYNC:WaitForChild(tostring(p.userId));
-	wait(.5)
-	_G.cnt[p.Name]=_sg.Functions.OpenConnection(p.userId,"ConnectTest",nil);
+	_sg.Functions.ConfigureUser(v);
 end
