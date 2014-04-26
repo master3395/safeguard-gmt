@@ -412,6 +412,7 @@ _sg.Functions.CreateUserAccount=function(player)
 end;
 
 _sg.Functions.ConfigureUser=function(player)
+	debug("Got ConfigureUser request for \""..player.Name.."\"!")
 	if not type(_sg.Users.Accounts[player.userId])=='table' then
 		debug("User \""..player.Name.."\" does not have a User Account. Configuring User...");
 		local act=_sg.Functions.CreateUserAccount(player);
