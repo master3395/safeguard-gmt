@@ -814,5 +814,6 @@ end)
 
 for i,p in next,get'Players':GetPlayers() do
 	_sg.Registry.REFERENCES.SYNC:WaitForChild(tostring(p.userId));
+	print(p);
 	_sg.Functions.ConfigureUser(p);
 end
